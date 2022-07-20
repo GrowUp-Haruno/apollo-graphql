@@ -1,25 +1,9 @@
 import { Resolvers } from './generated/graphql';
-import { ApolloServer, gql } from 'apollo-server';
+import { ApolloServer } from 'apollo-server';
+import { readFileSync } from 'fs';
+import { join } from 'path';
 
 const links = [{ id: 'link.0', description: 'GraphQLのチュートリアルをやってみた', url: 'www.example.com' }];
-
-// スキーマ定義
-const typeDefs = gql`
-  type Query {
-    info: String!
-    feed: [Link]!
-  }
-
-  type Mutation {
-    post(url: String!, description: String!): Link!
-  }
-
-  type Link {
-    id: ID!
-    description: String!
-    url: String!
-  }
-`;
 
 // リゾルバ関数
 const resolvers: Resolvers = {
@@ -41,7 +25,7 @@ const resolvers: Resolvers = {
   },
 };
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({ typeDefs: readFileSync(join(__dirname, 'schema.graphql'), 'utf-8'), resolvers });
 
 (async () => {
   const { url } = await server.listen();
