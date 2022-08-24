@@ -1,0 +1,33 @@
+scalar Date
+
+# スキーマ定義
+type Query {
+  info: String!
+  feed: [Link]!
+}
+
+type Mutation {
+  post(url: String!, description: String!): Link!
+  signup(email: String!, password: String!, name: String!): AuthPayload
+  login(email: String!, password: String!): AuthPayload
+}
+
+type Link {
+  id: Int!
+  createdAt: Date!
+  description: String!
+  url: String!
+  postedBy: User
+}
+
+type AuthPayload {
+  token: String
+  user: User
+}
+
+type User {
+  id: Int!
+  name: String!
+  email: String!
+  links: [Link!]
+}
